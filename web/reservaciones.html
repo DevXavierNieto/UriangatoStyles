@@ -4,9 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Reserva tu cita en Uriangato Style fácilmente. Escoge tu servicio, fecha y hora de atención.">
-    <meta name="keywords" content="reservar cita, peluquería, estética, belleza, servicios de cuidado personal">
-    <meta name="author" content="Uriangato Style">
     <title>Reservaciones | Uriangato Style</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -22,42 +19,45 @@
             <li><a href="conocenos.html" class="playfair-nav">Conócenos</a></li>
         </ul>
     </nav>
-
     <div class="container">
-        <h2 class="poppins">Reserva tu Cita</h2>
+        <h2>Reserva tu Cita</h2>
         <div class="form-container">
             <div class="form-header">
                 <div class="left">
-                    <label class="poppins">Selecciona tu Servicio</label>
-                    <select>
-                        <option>Elige un servicio</option>
+                    <label>Selecciona tu Servicio</label>
+                    <select id="eleccion" onchange="actualizarCosto()">
+                        <option value="">Elige un servicio</option>
+                        <option value="Manicura">Manicura</option>
+                        <option value="Cabello">Cabello</option>
+                        <option value="Corte">Corte</option>
+                        <option value="Reflejos">Reflejos</option>
+                        <option value="Pestañas permanentes">Pestañas permanentes</option>
                     </select>
-                    <label class="poppins">Fecha y Hora</label>
-                    <input type="datetime-local">
+                    <label>Fecha y Hora</label>
+                    <input type="datetime-local" id="fechaHora">
                 </div>
                 <div class="right">
-                    <label class="poppins">Nombre</label>
-                    <input type="text" placeholder="Ingresa tu nombre">
-                    <label class="poppins">Costo Estimado</label>
-                    <input type="text" placeholder="Costo">
+                    <label>Nombre</label>
+                    <input type="text" id="nombre" placeholder="Ingresa tu nombre">
+                    <label>Costo Estimado</label>
+                    <input type="number" readonly id="costo" placeholder="Costo">
                 </div>
             </div>
         </div>
 
-        <h2 class="poppins">¿Quieres recibir un recordatorio?</h2>
+        <h2>¿Quieres recibir un recordatorio?</h2>
         <div class="datos">
             <section>
-                <label class="poppins">Correo Electrónico</label>
-                <input type="email" class="serv" placeholder="Ingresa tu email">
+                <label>Correo Electrónico</label>
+                <input type="email" id="email" placeholder="Ingresa tu email">
             </section>
             <section>
-                <label class="poppins">Teléfono Celular</label>
-                <input type="tel" class="telef" placeholder="Número de contacto">
+                <label>Teléfono Celular</label>
+                <input type="tel" id="telefono" placeholder="Número de contacto">
             </section>
-            <button class="boton-dorado poppins">Confirmar Reserva</button>
+            <button onclick="reservar()" class="boton-dorado poppins">Confirmar Reserva</button>
         </div>
     </div>
-
     <footer>
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -79,6 +79,70 @@
                 condiciones</a></p>
         <p class="playfair-nav">© 2025 para Uriangato Style</p>
     </footer>
+
+    <script>
+        function actualizarCosto() {
+            const servicio = document.getElementById("eleccion").value;
+            const costo = document.getElementById("costo");
+            const precios = {
+                "Manicura": 150,
+                "Cabello": 200,
+                "Corte": 100,
+                "Reflejos": 250,
+                "Pestañas permanentes": 300
+            };
+            costo.value = precios[servicio] || 0;
+        }
+
+        function esNombreValido(nombre) {
+            return /^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$/.test(nombre);
+        }
+
+        function esEmailValido(email) {
+            return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+        }
+
+        function esTelefonoValido(telefono) {
+            return /^\d{10}$/.test(telefono);
+        }
+
+        function esFechaValida(fecha) {
+            const fechaIngresada = new Date(fecha);
+            const fechaActual = new Date();
+            return fechaIngresada > fechaActual;
+        }
+
+        function reservar() {
+            const nombre = document.getElementById("nombre").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const telefono = document.getElementById("telefono").value.trim();
+            const fecha = document.getElementById("fechaHora").value;
+            const servicio = document.getElementById("eleccion").value;
+
+            if (!esNombreValido(nombre)) {
+                alert("Nombre inválido. Solo se permiten letras y espacios.");
+                return;
+            }
+            if (!esEmailValido(email)) {
+                alert("Correo electrónico inválido.");
+                return;
+            }
+            if (!esTelefonoValido(telefono)) {
+                alert("Teléfono inválido. Debe contener 10 dígitos.");
+                return;
+            }
+            if (!esFechaValida(fecha)) {
+                alert("Fecha inválida. Debe ser una fecha futura.");
+                return;
+            }
+            if (servicio === "") {
+                alert("Selecciona un servicio válido.");
+                return;
+            }
+
+            alert("Reserva realizada con éxito");
+        }
+    </script>
 </body>
 
 </html>

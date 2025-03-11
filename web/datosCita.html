@@ -28,47 +28,66 @@
         <p class="solicitud poppins">Ingresa tu número de cita para ver los detalles</p>
         
         <div class="search-box">
-            <input type="text" placeholder="Ingresa tu código de cita">
-            <button class="search-button">🔍 Buscar</button>
+            <input type="text" id="codigoCita" placeholder="Ingresa tu código de cita" maxlength="5">
+            <button class="search-button" onclick="buscarCita()">🔍 Buscar</button>
         </div>
 
         <div class="appointment-details">
             <div class="left">
-                <p><strong>Fecha:</strong> 15/03/2025</p>
-                <p><strong>Cliente:</strong> Paula</p>
-                <p><strong>Ubicación:</strong> Colonia Ojo de Agua #15</p>
+                <p><strong>Fecha:</strong> <span id="fecha"></span></p>
+                <p><strong>Cliente:</strong> <span id="cliente"></span></p>
+                <p><strong>Ubicación:</strong> <span id="ubicacion"></span></p>
             </div>
             <div class="right">
-                <p><strong>Hora:</strong> 16:00 hrs</p>
-                <p><strong>Servicio:</strong> Corte de cabello</p>
-                <p><strong>Costo:</strong> $30</p>
+                <p><strong>Hora:</strong> <span id="hora"></span></p>
+                <p><strong>Servicio:</strong> <span id="servicio"></span></p>
+                <p><strong>Costo:</strong> <span id="costo"></span></p>
             </div>
         </div>
 
-        <button class="cancel-button">Cancelar Cita</button>
+        <button class="cancel-button" onclick="cancelarCita()">Cancelar Cita</button>
     </div>
 
     <footer>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3" />
-        </svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-linecap="round" stroke-linejoin="round" width="24" height="24" stroke-width="0.75">
-            <path
-                d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c0 -.249 1.51 -2.772 1.818 -4.013z">
-            </path>
-        </svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-linecap="round" stroke-linejoin="round" width="24" height="24" stroke-width="0.75">
-            <path d="M4 4m0 4a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"></path>
-            <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
-            <path d="M16.5 7.5l0 .01"></path>
-        </svg>
         <p><a href="politica.html" class="playfair-nav">Política de privacidad</a> | <a href="terminos.html">Términos y
                 condiciones</a></p>
         <p class="playfair-nav">© 2025 para Uriangato Style</p>
     </footer>
+
+    <script>
+        function buscarCita() {
+            var codigo = document.getElementById("codigoCita").value;
+            var regex = /^\d{5}$/; // Validar que sean exactamente 5 dígitos numéricos
+
+            if (!regex.test(codigo)) {
+                alert("Por favor, ingresa un código válido de 5 números.");
+                return;
+            }
+
+            // Datos predefinidos de la cita (puedes cambiar estos valores)
+            document.getElementById("fecha").innerText = "15 de Marzo de 2025";
+            document.getElementById("cliente").innerText = "Juan Pérez";
+            document.getElementById("ubicacion").innerText = "Sucursal Centro";
+            document.getElementById("hora").innerText = "10:30 AM";
+            document.getElementById("servicio").innerText = "Corte de Cabello";
+            document.getElementById("costo").innerText = "$200.00";
+
+            alert("Cita encontrada con éxito.");
+        }
+
+    function cancelarCita() {
+        // Limpiar los detalles de la cita
+        document.getElementById("fecha").innerText = "";
+        document.getElementById("cliente").innerText = "";
+        document.getElementById("ubicacion").innerText = "";
+        document.getElementById("hora").innerText = "";
+        document.getElementById("servicio").innerText = "";
+        document.getElementById("costo").innerText = "";
+
+        // Mostrar mensaje de cita cancelada
+        alert("Cita cancelada");
+    }
+    </script>
 </body>
 
 </html>
