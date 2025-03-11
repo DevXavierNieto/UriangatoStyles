@@ -1,56 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservaciones</title>
+    <meta name="description" content="Reserva tu cita en Uriangato Style fácilmente. Escoge tu servicio, fecha y hora de atención.">
+    <meta name="keywords" content="reservar cita, peluquería, estética, belleza, servicios de cuidado personal">
+    <meta name="author" content="Uriangato Style">
+    <title>Reservaciones | Uriangato Style</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <nav>
         <h1 class="playfair">URIANGATO STYLE</h1>
         <ul>
-            <li><a href="#" class="playfair-nav">Inicio</a></li>
+            <li><a href="index.html" class="playfair-nav">Inicio</a></li>
             <li><a href="reservaciones.html" class="playfair-nav">Reserva Online</a></li>
-            <li><a href="#" class="playfair-nav">Promociones</a></li>
+            <li><a href="promociones.html" class="playfair-nav">Promociones</a></li>
             <li><a href="datosCita.html" class="playfair-nav">Datos de tu cita</a></li>
             <li><a href="conocenos.html" class="playfair-nav">Conócenos</a></li>
         </ul>
     </nav>
 
     <div class="container">
+        <h2 class="poppins">Reserva tu Cita</h2>
         <div class="form-container">
             <div class="form-header">
                 <div class="left">
-                    <label class="poppins">Servicio</label>
+                    <label class="poppins">Selecciona tu Servicio</label>
                     <select>
                         <option>Elige un servicio</option>
                     </select>
-                    <label class="poppins">Fecha y hora</label>
+                    <label class="poppins">Fecha y Hora</label>
                     <input type="datetime-local">
                 </div>
                 <div class="right">
                     <label class="poppins">Nombre</label>
-                    <input type="text" value="Xavier">
-                    <label class="poppins">Costo</label>
-                    <input type="text" value="$30">
+                    <input type="text" placeholder="Ingresa tu nombre">
+                    <label class="poppins">Costo Estimado</label>
+                    <input type="text" placeholder="Costo">
                 </div>
             </div>
         </div>
-        <h2 class="poppins">¿Deseas recibir algún recordatorio?</h2>
+
+        <h2 class="poppins">¿Quieres recibir un recordatorio?</h2>
         <div class="datos">
             <section>
-                <label class="poppins">GMAIL</label>
-                <input type="email" class="serv">
+                <label class="poppins">Correo Electrónico</label>
+                <input type="email" class="serv" placeholder="Ingresa tu email">
             </section>
             <section>
-                <label class="poppins">Teléfono celular</label>
-                <input type="tel" class="telef" value="4771234567">
+                <label class="poppins">Teléfono Celular</label>
+                <input type="tel" class="telef" placeholder="Número de contacto">
             </section>
-            <button class="boton-dorado poppins">Confirmar</button>
+            <button class="boton-dorado poppins">Confirmar Reserva</button>
         </div>
     </div>
-    
 
     <footer>
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -74,4 +80,5 @@
         <p class="playfair-nav">© 2025 para Uriangato Style</p>
     </footer>
 </body>
+
 </html>
