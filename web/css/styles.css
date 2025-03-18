@@ -1,0 +1,733 @@
+:root {
+    --background-color: #222;
+    --background-light: #FBD5E5;
+    --black: black;
+    --border-color: #ccc;
+    --button-gold: gold;
+    --button-red: red;
+    --button-red-hover: darkred;
+    --footer-background: linear-gradient(to right, #555, #201f1f);
+    --gradient-box: linear-gradient(to right, #434242, #000);
+    --gradient-navbar: linear-gradient(to right, #555, #000);
+    --text-color: white;
+    --text-dark: black;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.appointment-details {
+    background: var(--black);
+    background: linear-gradient(to right, var(--black), #333);
+    border-radius: 10px;
+    color: var(--text-color);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 20px;
+    width: 60%;
+}
+
+.appointment-details-adm {
+    width: 80%; 
+    max-width: 800px; 
+    background: black;
+    color: white; 
+    padding: 15px;
+    border-radius: 10px;
+    margin: 20px auto;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; 
+}
+
+.appointment-details .left,
+.appointment-details .right {
+    padding: 10px;
+    text-align: left;
+    width: 50%;
+}
+
+.background {
+    background-color: var(--background-light);
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+    min-height: 100vh; 
+    text-align: center;
+}
+
+.boton-dorado {
+    background: var(--button-gold);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+    padding: 10px 15px;
+    width: 100%;
+}
+
+/* Caja con el texto de la política, mismo gradiente */
+.box {
+    background: var(--gradient-box);
+    border-radius: 10px;
+    color: var(--text-color);
+    height: 99%;
+    padding: 10px 20px 20px 20px;
+    text-align: left;
+    width: 100%;
+}
+
+.box p {
+    padding-top: 1%;
+}
+
+/* Contenedor del calendario */
+.calendar-container-adm {
+    flex: 1; /* Permite que ambos contenedores ocupen el mismo espacio */
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    min-height: 400px;
+}
+
+.calendar-title-adm {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.calendar-container-adm iframe {
+    flex-grow: 1; /* Hace que el calendario ocupe todo el espacio disponible dentro del div */
+    width: 100%;
+    height: 100%; 
+}
+
+/* Botón de cancelar */
+.cancel-button {
+    background: var(--button-red);
+    border: none;
+    border-radius: 5px;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 20px;
+}
+
+.cancel-button:hover {
+    background: var(--button-red-hover);
+}
+
+/* Contenedor principal de la cita */
+.cita-container {
+    align-items: center;
+    background-color: var(--background-light);
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    padding: 20px;
+    width: 100%;
+}
+
+/* Estilos para el título y el input */
+.cita-container h2 {
+    color: var(--text-dark);
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.cita-container p {
+    color: var(--text-dark);
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.cont {
+    background-color: rgb(251, 213, 229);
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    align-items: center;
+    background-color: var(--background-light);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    flex-grow: 1;
+}
+
+/* Contenido principal */
+.content {
+    height: 85%;
+    max-width: 800px;
+    padding: 10px 30px 30px 30px;
+    text-align: left;
+    width: 100%;
+}
+
+.datos {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    margin-left: 5%;
+    padding-top: 10px;
+    width: 40%;
+}
+
+.datos input {
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 8px;
+    width: 100%;
+}
+
+.datos label {
+    color: var(--text-dark);
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.datos section {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.empty-container-adm {
+    position: relative; 
+    flex: 1;
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: flex-start; 
+    justify-content: flex-start;
+    min-height: 400px; 
+}
+
+.empty-title-adm {
+    color: #888;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+footer {
+    background: var(--footer-background);
+    color: var(--text-color);
+    height: auto;
+    padding: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+footer a {
+    color: var(--text-color);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.form-container {
+    align-items: flex-start;
+    background: var(--black);
+    border-radius: 10px;
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    padding: 20px;
+    width: 60%;
+}
+
+.form-container-adm {
+    width: 80%;
+    max-width: 800px;
+    background: black; 
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    min-height: 200px;
+}
+
+.form-header {
+    align-items: flex-start;
+    display: flex;
+    gap: 20px;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.grid {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    height: 60%;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.grid div {
+    background: var(--text-color);
+    border: 1px solid var(--black);
+    border-radius: 5px;
+    color: var(--text-dark);
+    padding: 15px;
+}
+
+h2 {
+    color: var(--text-dark);
+    display: block;
+    margin: 0 auto;
+    padding-top: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+input,
+select {
+    border: none;
+    border-radius: 5px;
+    padding: 8px;
+}
+
+.left,
+.right {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-right: 70%;
+    text-align: left;
+}
+
+.left-adm, .right-adm {
+    flex: 1;
+    min-width: 45%; /* Mantiene las dos columnas */
+    text-align: left;
+    padding: 5px 10px;
+}
+
+.right-adm p {
+    display: block; /* Mostrar los elementos */
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.main-container-adm {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch; 
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+    height: auto; 
+    flex-grow: 1; /* Permite que crezca dentro del contenedor principal */
+}
+
+nav {
+    align-items: center;
+    background: var(--gradient-navbar);
+    display: flex;
+    height: 10%;
+    justify-content: space-between;
+    padding: 10px 30px;
+    width: 100%;
+}
+
+nav h1 {
+    color: var(--text-color);
+    font-size: 24px;
+}
+
+nav ul {
+    display: flex;
+    gap: 15px;
+    list-style: none;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    color: var(--text-color);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.newline {
+    display: block;
+    margin-left: 20px;
+    margin-top: 5px;
+}
+
+.parisiene {
+    font-family: 'Parisienne', cursive;
+    font-size: 32px;
+}
+
+.playfair {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+}
+
+.playfair-nav {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+}
+
+.poppins {
+    font-family: 'Poppins', sans-serif;
+    font-size: 30px;
+}
+
+.recordar-cita-btn {
+    background: var(--button-gold);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 15px;
+    padding: 10px 15px;
+    width: 100%;
+    color: black; 
+    font-size: 16px;
+    transition: background 0.3s ease-in-out;
+}
+
+.recordar-cita-btn:hover {
+    background: darkgoldenrod;
+}
+
+.search-box {
+    align-items: center;
+    display: flex;
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+.search-box input {
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 10px;
+    text-align: center;
+    width: 250px;
+}
+
+.search-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.serv,
+.telef {
+    width: 25%;
+}
+
+.solicitud {
+    color: var(--text-dark);
+}
+
+.title-center {
+    text-align: center;
+}
+
+.promo-container {
+    width: 100%;
+    background: #FBD5E5;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+
+.promo-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 3px solid black;
+}
+
+.user-info-adm {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.promo-box {
+    background-color: white;
+    color: black;
+    font-family: 'Parisienne', cursive;
+    font-size: 24px;
+    padding: 40px;
+    text-align: center;
+    width: 50%; 
+    height: 180px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 2px solid black;
+}
+
+
+.promo-box:last-child {
+    border-right: none;
+}
+
+
+.promo-divider {
+    width: 100%;
+    height: 10px;
+    background: #FBD5E5;
+}
+
+.promo-header-container {
+    background: #FBD5E5;
+    text-align: center;
+    padding: 25px 0; 
+    font-size: 24px;
+    font-weight: bold;
+    border-bottom: 3px solid black;
+    margin-top: 15px; 
+}
+
+.user-img-adm {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; 
+    object-fit: cover;
+    border: 2px solid #333; 
+}
+
+.user-time-adm {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Navbar */
+.nav-adm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px; /* Ajusta la altura según necesites */
+    background-color: #f8f8f8; /* Color de fondo opcional */
+}
+
+.navbar-unique {
+    background: linear-gradient(to right, #555, #000);
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-title-unique {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: white;
+}
+
+.nav-links-unique {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+
+.nav-links-unique li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Sección de Bienvenida con Fondo Inclinado */
+.header-unique {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    height: 200px;
+    background: linear-gradient(to right, #72797e, #5d6368);
+    overflow: hidden;
+    padding: 20px 50px;
+    color: rgb(3, 3, 3);
+    width: 100vw; /* Asegura que abarque todo el ancho de la pantalla */
+    max-width: 100%; /* Evita que el ancho se limite */
+    box-sizing: border-box; /* Evita que el padding afecte el tamaño */
+}
+
+.header-unique::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 45%;
+    height: 100%;
+    background: linear-gradient(to right, #979ca0, #c2c5c7); /* Ajuste de color */
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+
+.header-text-unique {
+    width: 35%;
+    font-size: 22px;
+    font-family: 'Parisienne', cursive;
+    position: relative;
+}
+
+.header-image-unique img {
+    width: 200px;
+    height: auto;
+    border-radius: 10px;
+    position: relative;
+    z-index: 2;
+}
+
+/* Promociones */
+.promo-section-unique {
+    width: 100vw; /* Hace que abarque todo el ancho de la pantalla */
+    max-width: 100%; /* Asegura que no se reduzca en dispositivos pequeños */
+    display: flex; /* Mantiene los elementos en línea */
+    justify-content: space-between; /* Separa los elementos */
+    background: rgb(255, 255, 255); /* Mantiene el fondo blanco */
+    color : rgb(0, 0, 0);
+}
+
+.promo-box-unique {
+    flex: 1; /* Hace que ambas cajas ocupen el mismo espacio */
+    padding: 50px;
+    border: 2px solid black;
+    font-size: 18px;
+    font-family: 'Parisienne', cursive;
+    font-size: 30px;
+    text-align: center;
+    color:#000
+}
+
+/* Servicios */
+.service-item {
+    display: flex;
+    justify-content: space-between; /* Separa el nombre y el precio */
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Opcional: línea divisoria */
+}
+
+.service-item span:first-child {
+    text-align: left; /* Alinea el nombre del servicio a la izquierda */
+    flex-grow: 1; /* Permite que el nombre ocupe el espacio disponible */
+}
+
+.service-item span:last-child {
+    text-align: right; /* Alinea el precio a la derecha */
+    min-width: 50px; /* Evita que el precio se achique demasiado */
+}
+
+.services-section-unique {
+    background: #FBD5E5;
+    padding: 40px;
+    text-align: center;
+}
+
+.services-box-unique {
+    background: linear-gradient(to right, #434242, #000);
+    color: white;
+    padding: 20px;
+    width: 300px;
+    margin: auto;
+    border-radius: 10px;
+}
+
+.services-box-unique a {
+    color: inherit; /* Usa el color del texto del contenedor */
+    text-decoration: none; /* Quita el subrayado */
+    font-weight: normal; /* Asegura que tenga el mismo peso que el texto */
+    cursor: pointer; /* Mantiene el puntero de enlace */
+    display: block; /* Hace que ocupe toda la línea */
+    margin-top: 10px; /* Agrega un poco de espacio arriba */
+}
+
+.services-box-unique a:hover {
+    text-decoration: underline; /* Opcional: subrayado al pasar el cursor */
+}
+
+/* Testimonios */
+.testimonials-section-unique {
+    background: white;
+    padding: 40px;
+    text-align: center;
+}
+
+.testimonials-section-unique h3 {
+    font-size: 36px; /* Ajusta el tamaño de la fuente */
+    font-family: 'Playfair Display', serif; /* Usa la fuente Playfair */
+    color: black; /* Cambia el color a negro */
+    font-weight: bold; /* Asegura que el texto tenga peso */
+    text-align: center; /* Asegura que esté centrado */
+    margin-bottom: 20px; /* Añade un poco de espacio debajo */
+}
+
+.testimonials-container-unique {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    text-align: center;
+    max-width: 80%;
+    margin: auto;
+}
+
+.testimonial-unique {
+    width: 30%;
+    padding: 20px;
+    font-size: 16px;
+    font-style: italic;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: rgb(0, 0, 0);
+}
+
+.quote-unique {
+    font-size: 40px;
+    font-weight: bold;
+    color: rgb(5, 5, 5);
+    margin-bottom: 5px;
+}
+
+/* Scroll */
+html {
+    scroll-behavior: smooth; /* Hace que el scroll sea suave */
+}
+
+/* Footer */
+.footer-unique {
+    background: linear-gradient(to right, #555, #000);
+    padding: 20px;   
+}
+
+.footer-unique a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;   
+}

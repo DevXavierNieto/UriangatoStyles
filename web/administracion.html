@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración | Uriangato Style</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <nav class="nav-adm">
+        <h1 class="title-adm">URIANGATO STYLE</h1>
+    </nav>
+    
+    <main class="container container-adm">
+        <section class="main-container-adm">
+            <article class="calendar-container-adm">
+                <h2 class="calendar-title-adm">Selecciona una fecha</h2>
+                <input type="date" id="date-picker" class="date-input-adm">
+                <iframe src="https://calendar.google.com/calendar/embed?src=es.mexican%23holiday%40group.v.calendar.google.com&ctz=America%2FMexico_City"
+                        style="border: 0" width="100%" height="400" frameborder="0" scrolling="no">
+                </iframe>
+            </article>
+
+            <section class="empty-container-adm" id="user-container">
+                <h2 class="empty-title-adm">Selecciona una fecha</h2>
+            </section>
+        </section>
+    </main>
+
+    <section class="cont">
+        <article class="appointment-details-adm">
+            <div class="left-adm">
+                <p><strong>Fecha de la cita:</strong></p>
+                <p><strong>Nombre del cliente:</strong></p>
+                <p><strong>Lugar de cita:</strong></p>
+            </div>
+            <div class="right-adm">
+                <p id="fecha-cita"></p>
+                <p id="nombre-cliente"></p>
+                <p id="lugar-cita"></p>
+            </div>
+            <div class="left-adm">
+                <p><strong>Hora de la cita:</strong></p>
+                <p><strong>Razón de la cita:</strong></p>
+                <p><strong>Costo:</strong></p>
+            </div>
+            <div class="right-adm">
+                <p id="hora-cita"></p>
+                <p id="razon-cita"></p>
+                <p id="costo-cita"></p>
+            </div>
+            <button class="recordar-cita-btn" id="recordar-cita">Recordar cita</button>
+        </article>
+    </section>  
+
+    <footer>
+        <div class="footer-icons">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-linecap="round" stroke-linejoin="round" width="24" height="24" stroke-width="0.75">
+                <path
+                    d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c0 -.249 1.51 -2.772 1.818 -4.013z">
+                </path>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-linecap="round" stroke-linejoin="round" width="24" height="24" stroke-width="0.75">
+                <path d="M4 4m0 4a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"></path>
+                <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
+                <path d="M16.5 7.5l0 .01"></path>
+            </svg>
+        </div>
+        <p><a href="politica.html" class="playfair-nav">Política de privacidad</a> | <a href="terminos.html">Términos y
+                condiciones</a></p>
+        <p class="playfair-nav">© 2025 para Uriangato Style</p>
+    </footer>
+
+    <script>
+        document.getElementById('date-picker').addEventListener('change', function() {
+            const selectedDate = this.value;
+            const userContainer = document.getElementById('user-container');
+
+            if (selectedDate) {
+                const randomHour = Math.floor(Math.random() * (18 - 9 + 1)) + 9;
+                const randomMinutes = Math.random() > 0.5 ? '00' : '30';
+                const randomTime = `${randomHour}:${randomMinutes} hrs`;
+
+                userContainer.innerHTML = `
+                    <div class="user-info-adm" id="clickable-user">
+                        <img src="imgs/user.png" alt="Usuario" class="user-img-adm">
+                        <p class="user-time-adm">${randomTime}</p>
+                    </div>
+                `;
+
+                document.getElementById("clickable-user").addEventListener("click", function() {
+                    document.getElementById("fecha-cita").innerText = selectedDate;
+                    document.getElementById("nombre-cliente").innerText = "Paula";
+                    document.getElementById("lugar-cita").innerText = "Colonia Ojo de agua #15";
+                    document.getElementById("hora-cita").innerText = randomTime;
+                    document.getElementById("razon-cita").innerText = "Corte";
+                    document.getElementById("costo-cita").innerText = "$30";
+                });
+            }
+        });
+    </script>
+</body>
+</html>
