@@ -252,7 +252,7 @@ footer a {
     flex-direction: column;
     margin-top: 20px;
     padding: 20px;
-    width: 60%;
+    width: 43%;
 }
 
 .form-container-adm {
@@ -272,6 +272,8 @@ footer a {
     gap: 20px;
     justify-content: flex-start;
     text-align: left;
+    flex-wrap: wrap; /* Permite que los elementos se acomoden si no hay suficiente espacio */
+    width: 100%; /* Asegura que el contenedor no exceda el tamaño */
 }
 
 .grid {
@@ -312,8 +314,9 @@ select {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding-right: 70%;
     text-align: left;
+    min-width: 300px; /* Evita que los inputs sean demasiado pequeños */
+    padding-right: 0;
 }
 
 .left-adm, .right-adm {

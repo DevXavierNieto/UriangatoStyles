@@ -109,8 +109,41 @@
         function esFechaValida(fecha) {
             const fechaIngresada = new Date(fecha);
             const fechaActual = new Date();
-            return fechaIngresada > fechaActual;
+
+            // Obtener fecha sin la parte de la hora
+            const soloFechaIngresada = new Date(fechaIngresada.getFullYear(), fechaIngresada.getMonth(), fechaIngresada.getDate());
+            const soloFechaActual = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate());
+
+            // Validar que la fecha no sea anterior al día actual
+            if (soloFechaIngresada < soloFechaActual) {
+                alert("No puedes seleccionar una fecha anterior al día actual.");
+                return false;
+            }
+
+            // Si la fecha es el mismo día, validar que la hora sea al menos 1 hora después
+            if (soloFechaIngresada.getTime() === soloFechaActual.getTime()) {
+                let fechaMinima = new Date();
+                fechaMinima.setHours(fechaActual.getHours() + 1, fechaActual.getMinutes(), 0, 0);
+
+                if (fechaIngresada < fechaMinima) {
+                    alert("Si reservas para hoy, la hora debe ser al menos una hora después de la actual.");
+                    return false;
+                }
+            }
+
+            // Obtener horas y minutos de la fecha ingresada
+            const horaIngresada = fechaIngresada.getHours();
+            const minutosIngresados = fechaIngresada.getMinutes();
+
+            // Verificar que la hora esté entre 8:00 AM y 8:00 PM
+            if (horaIngresada < 8 || horaIngresada > 19 || (horaIngresada === 19 && minutosIngresados > 0)) {
+                alert("Selecciona un horario entre 8:00 AM y 8:00 PM.");
+                return false;
+            }
+
+            return true;
         }
+
 
         function reservar() {
             const nombre = document.getElementById("nombre").value.trim();
@@ -118,29 +151,44 @@
             const telefono = document.getElementById("telefono").value.trim();
             const fecha = document.getElementById("fechaHora").value;
             const servicio = document.getElementById("eleccion").value;
+            const costo = document.getElementById("costo").value;
 
-            if (!esNombreValido(nombre)) {
-                alert("Nombre inválido. Solo se permiten letras y espacios.");
-                return;
-            }
-            if (!esEmailValido(email)) {
-                alert("Correo electrónico inválido.");
-                return;
-            }
-            if (!esTelefonoValido(telefono)) {
-                alert("Teléfono inválido. Debe contener 10 dígitos.");
-                return;
-            }
-            if (!esFechaValida(fecha)) {
-                alert("Fecha inválida. Debe ser una fecha futura.");
-                return;
-            }
-            if (servicio === "") {
-                alert("Selecciona un servicio válido.");
+            if (!nombre || !email || !telefono || !fecha || !servicio || !costo) {
+                alert("Todos los campos son obligatorios.");
                 return;
             }
 
-            alert("Reserva realizada con éxito");
+            const formData = new FormData();
+            formData.append("accion", "reservar");
+            formData.append("nombre", nombre);
+            formData.append("email", email);
+            formData.append("telefono", telefono);
+            formData.append("servicio", servicio);
+            formData.append("fecha_hora", fecha);
+            formData.append("costo", costo);
+
+            fetch("server/database.php", { 
+                method: "POST",
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        alert("Reserva realizada con éxito");
+                        document.getElementById("nombre").value = "";
+                        document.getElementById("email").value = "";
+                        document.getElementById("telefono").value = "";
+                        document.getElementById("fechaHora").value = "";
+                        document.getElementById("eleccion").value = "";
+                        document.getElementById("costo").value = "";
+                    } else {
+                        alert("Error: " + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error en la solicitud:", error);
+                    alert("Hubo un error al procesar la reserva. Intenta de nuevo.");
+                });
         }
     </script>
 </body>
