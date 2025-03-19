@@ -104,6 +104,40 @@
         // Mostrar mensaje de cita cancelada
         alert("Cita cancelada");
     }
+
+    function buscarCita() {
+        var codigo = document.getElementById("codigoCita").value;
+        var regex = /^[A-Z0-9]{5}$/;
+
+        if (!regex.test(codigo)) {
+            alert("Por favor, ingresa un código válido de 5 caracteres alfanuméricos.");
+            return;
+        }
+
+        fetch("server/database.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: "accion=obtenerCita&codigo=" + encodeURIComponent(codigo)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                document.getElementById("fecha").innerText = data.fecha;
+                document.getElementById("hora").innerText = data.hora;
+                document.getElementById("cliente").innerText = data.cliente;
+                document.getElementById("ubicacion").innerText = data.ubicacion;
+                document.getElementById("servicio").innerText = data.servicio;
+                document.getElementById("costo").innerText = data.costo;
+                alert("Cita encontrada con éxito.");
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Hubo un problema al buscar la cita.");
+        });
+    }
     </script>
 </body>
 

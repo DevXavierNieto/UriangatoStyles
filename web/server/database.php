@@ -5,20 +5,9 @@ header("Content-Type: application/json");
 
 require_once 'conexion.php';
 
-$conn = conectarDB();
+$conn = conectarDB(); // Conexión a la base de datos
 
-if (!$conn) {
-    die(json_encode(["status" => "error", "message" => "Error en la conexión a la base de datos."]));
-}
-
-// Función para generar código aleatorio
-function generarCodigo($longitud = 5) {
-    $caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    return substr(str_shuffle($caracteres), 0, $longitud);
-}
-
-// Función para manejar la reserva (sin envío de correo)
-function reservarCita($conn) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre = isset($_POST['nombre']) ? trim($_POST['nombre']) : null;
     $email = isset($_POST['email']) ? trim($_POST['email']) : null;
     $telefono = isset($_POST['telefono']) ? trim($_POST['telefono']) : null;
@@ -31,45 +20,35 @@ function reservarCita($conn) {
         exit;
     }
 
-    // Convertir fecha al formato correcto de MySQL
-    $fecha_hora = str_replace("T", " ", $fecha_hora) . ":00";
+    // Generar código único de 5 caracteres (letras y números)
+    function generarCodigo($longitud = 5) {
+        $caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        return substr(str_shuffle($caracteres), 0, $longitud);
+    }
 
     $codigo = generarCodigo();
 
     $stmt = $conn->prepare("INSERT INTO reservaciones (nombre, email, telefono, servicio, fecha_hora, costo, codigo) VALUES (?, ?, ?, ?, ?, ?, ?)");
-
+    
     if (!$stmt) {
-        echo json_encode(["status" => "error", "message" => "Error en la consulta: " . $conn->error]);
+        echo json_encode(["status" => "error", "message" => "Error en la preparación de la consulta: " . $conn->error]);
         exit;
     }
 
-    $stmt->bind_param("sssssss", $nombre, $email, $telefono, $servicio, $fecha_hora, $costo, $codigo);
+    $stmt->bind_param("ssssdds", $nombre, $email, $telefono, $servicio, $fecha_hora, $costo, $codigo);
 
     if ($stmt->execute()) {
         echo json_encode([
             "status" => "success",
-            "message" => "Reserva realizada con éxito.",
-            "codigo" => $codigo
+            "message" => "Reserva realizada con éxito",
+            "codigo" => $codigo // Devolvemos el código generado
         ]);
-        
     } else {
         echo json_encode(["status" => "error", "message" => "Error al guardar la reserva: " . $stmt->error]);
     }
+
     $stmt->close();
-}
-
-// Controlador para manejar las solicitudes
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $accion = isset($_POST['accion']) ? $_POST['accion'] : null;
-
-    switch ($accion) {
-        case "reservar":
-            reservarCita($conn);
-            break;
-        default:
-            echo json_encode(["status" => "error", "message" => "Acción no válida"]);
-            break;
-    }
+    $conn->close();
 } else {
     echo json_encode(["status" => "error", "message" => "Método no permitido"]);
 }

@@ -93,58 +93,52 @@
             };
             costo.value = precios[servicio] || 0;
         }
-
+    
         function esNombreValido(nombre) {
             return /^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$/.test(nombre);
         }
-
+    
         function esEmailValido(email) {
             return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
         }
-
+    
         function esTelefonoValido(telefono) {
             return /^\d{10}$/.test(telefono);
         }
-
+    
         function esFechaValida(fecha) {
             const fechaIngresada = new Date(fecha);
             const fechaActual = new Date();
-
-            // Obtener fecha sin la parte de la hora
+    
             const soloFechaIngresada = new Date(fechaIngresada.getFullYear(), fechaIngresada.getMonth(), fechaIngresada.getDate());
             const soloFechaActual = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate());
-
-            // Validar que la fecha no sea anterior al día actual
+    
             if (soloFechaIngresada < soloFechaActual) {
                 alert("No puedes seleccionar una fecha anterior al día actual.");
                 return false;
             }
-
-            // Si la fecha es el mismo día, validar que la hora sea al menos 1 hora después
+    
             if (soloFechaIngresada.getTime() === soloFechaActual.getTime()) {
                 let fechaMinima = new Date();
                 fechaMinima.setHours(fechaActual.getHours() + 1, fechaActual.getMinutes(), 0, 0);
-
+    
                 if (fechaIngresada < fechaMinima) {
                     alert("Si reservas para hoy, la hora debe ser al menos una hora después de la actual.");
                     return false;
                 }
             }
-
-            // Obtener horas y minutos de la fecha ingresada
+    
             const horaIngresada = fechaIngresada.getHours();
             const minutosIngresados = fechaIngresada.getMinutes();
-
-            // Verificar que la hora esté entre 8:00 AM y 8:00 PM
+    
             if (horaIngresada < 8 || horaIngresada > 19 || (horaIngresada === 19 && minutosIngresados > 0)) {
                 alert("Selecciona un horario entre 8:00 AM y 8:00 PM.");
                 return false;
             }
-
+    
             return true;
         }
-
-
+    
         function reservar() {
             const nombre = document.getElementById("nombre").value.trim();
             const email = document.getElementById("email").value.trim();
@@ -159,7 +153,7 @@
             }
 
             const formData = new FormData();
-            formData.append("accion", "reservar");
+            formData.append("accion", "validar");
             formData.append("nombre", nombre);
             formData.append("email", email);
             formData.append("telefono", telefono);
@@ -167,30 +161,63 @@
             formData.append("fecha_hora", fecha);
             formData.append("costo", costo);
 
+            fetch("server/validaciones.php", { 
+                method: "POST",
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Error en la solicitud: " + response.statusText);
+                }
+                return response.text();
+            })
+            .then(text => {
+                try {
+                    return JSON.parse(text);
+                } catch (error) {
+                    console.error("Error parseando JSON:", text);
+                    throw new Error("Respuesta no es un JSON válido");
+                }
+            })
+            .then(data => {
+                if (data.status === "success") {
+                    procesarReserva(formData);
+                } else {
+                    alert("Error: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error en la solicitud de validación:", error);
+                alert("Hubo un error al validar la información.");
+            });
+        }
+
+    
+        function procesarReserva(formData) {
             fetch("server/database.php", { 
                 method: "POST",
                 body: formData
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === "success") {
-                        alert("Reserva realizada con éxito");
-                        document.getElementById("nombre").value = "";
-                        document.getElementById("email").value = "";
-                        document.getElementById("telefono").value = "";
-                        document.getElementById("fechaHora").value = "";
-                        document.getElementById("eleccion").value = "";
-                        document.getElementById("costo").value = "";
-                    } else {
-                        alert("Error: " + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error("Error en la solicitud:", error);
-                    alert("Hubo un error al procesar la reserva. Intenta de nuevo.");
-                });
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    alert("Reserva realizada con éxito");
+                    document.getElementById("nombre").value = "";
+                    document.getElementById("email").value = "";
+                    document.getElementById("telefono").value = "";
+                    document.getElementById("fechaHora").value = "";
+                    document.getElementById("eleccion").value = "";
+                    document.getElementById("costo").value = "";
+                } else {
+                    alert("Error: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error en la solicitud:", error);
+                alert("Hubo un error al procesar la reserva. Intenta de nuevo.");
+            });
         }
-    </script>
+    </script>    
 </body>
 
 </html>

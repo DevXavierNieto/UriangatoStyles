@@ -8,9 +8,9 @@ function conectarDB() {
     $conn = new mysqli($servidor, $usuario, $clave, $bd, 3306);
 
     if ($conn->connect_error) {
-        echo json_encode(["status" => "error", "message" => "Error de conexión a la base de datos"]);
-        exit;
+        die(json_encode(["status" => "error", "message" => "Error de conexión: " . $conn->connect_error]));
     }
+    
 
     return $conn;
 }
