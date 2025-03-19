@@ -107,7 +107,7 @@
 
     function buscarCita() {
         var codigo = document.getElementById("codigoCita").value;
-        var regex = /^[A-Z0-9]{5}$/; // Acepta letras y números
+        var regex = /^[A-Z0-9]{5}$/; // Validar que sean 5 caracteres alfanuméricos
 
         if (!regex.test(codigo)) {
             alert("Por favor, ingresa un código válido de 5 caracteres alfanuméricos.");
@@ -131,13 +131,26 @@
                 alert("Cita encontrada con éxito.");
             } else {
                 alert(data.message);
+                limpiarCampos();
             }
         })
         .catch(error => {
             console.error("Error:", error);
             alert("Hubo un problema al buscar la cita.");
+            limpiarCampos();
         });
     }
+
+    // Función para limpiar los campos si no se encuentra una cita
+    function limpiarCampos() {
+        document.getElementById("fecha").innerText = "";
+        document.getElementById("hora").innerText = "";
+        document.getElementById("cliente").innerText = "";
+        document.getElementById("ubicacion").innerText = "";
+        document.getElementById("servicio").innerText = "";
+        document.getElementById("costo").innerText = "";
+    }
+
     </script>
 </body>
 

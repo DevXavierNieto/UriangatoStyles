@@ -8,6 +8,43 @@ require_once 'conexion.php';
 $conn = conectarDB(); // Conexión a la base de datos
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['codigo'])) {
+        // Buscar una cita por código
+        $codigo = trim($_POST['codigo']);
+
+        if (!$codigo) {
+            echo json_encode(["status" => "error", "message" => "Código de cita requerido."]);
+            exit;
+        }
+
+        $stmt = $conn->prepare("SELECT fecha_hora, nombre, servicio, costo FROM reservaciones WHERE codigo = ?");
+        $stmt->bind_param("s", $codigo);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $cita = $result->fetch_assoc();
+            $fechaHora = new DateTime($cita['fecha_hora']);
+
+            echo json_encode([
+                "status" => "success",
+                "fecha" => $fechaHora->format('Y-m-d'),
+                "hora" => $fechaHora->format('H:i'),
+                "cliente" => $cita['nombre'],
+                "servicio" => $cita['servicio'],
+                "costo" => "$" . number_format($cita['costo'], 2),
+                "ubicacion" => "Sucursal Principal" // Puedes modificar esto si tienes ubicación en la BD
+            ]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "No se encontró ninguna cita con ese código."]);
+        }
+
+        $stmt->close();
+        $conn->close();
+        exit;
+    }
+
+    // Registro de una nueva reserva
     $nombre = isset($_POST['nombre']) ? trim($_POST['nombre']) : null;
     $email = isset($_POST['email']) ? trim($_POST['email']) : null;
     $telefono = isset($_POST['telefono']) ? trim($_POST['telefono']) : null;
