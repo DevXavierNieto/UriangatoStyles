@@ -107,7 +107,7 @@
 
     function buscarCita() {
         var codigo = document.getElementById("codigoCita").value;
-        var regex = /^[A-Z0-9]{5}$/;
+        var regex = /^[A-Z0-9]{5}$/; // Acepta letras y números
 
         if (!regex.test(codigo)) {
             alert("Por favor, ingresa un código válido de 5 caracteres alfanuméricos.");
@@ -117,7 +117,7 @@
         fetch("server/database.php", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: "accion=obtenerCita&codigo=" + encodeURIComponent(codigo)
+            body: "codigo=" + encodeURIComponent(codigo)
         })
         .then(response => response.json())
         .then(data => {

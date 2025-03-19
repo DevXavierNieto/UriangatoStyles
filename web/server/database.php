@@ -20,6 +20,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
+    // Intentar convertir la fecha al formato correcto (YYYY-MM-DD HH:MM:SS)
+    try {
+        $fecha_hora_obj = new DateTime($fecha_hora);
+        $fecha_hora_formateada = $fecha_hora_obj->format('Y-m-d H:i:s');
+    } catch (Exception $e) {
+        echo json_encode(["status" => "error", "message" => "Formato de fecha y hora inválido"]);
+        exit;
+    }
+
     // Generar código único de 5 caracteres (letras y números)
     function generarCodigo($longitud = 5) {
         $caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -29,19 +38,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $codigo = generarCodigo();
 
     $stmt = $conn->prepare("INSERT INTO reservaciones (nombre, email, telefono, servicio, fecha_hora, costo, codigo) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    
+
     if (!$stmt) {
         echo json_encode(["status" => "error", "message" => "Error en la preparación de la consulta: " . $conn->error]);
         exit;
     }
 
-    $stmt->bind_param("ssssdds", $nombre, $email, $telefono, $servicio, $fecha_hora, $costo, $codigo);
+    $stmt->bind_param("sssssss", $nombre, $email, $telefono, $servicio, $fecha_hora_formateada, $costo, $codigo);
 
     if ($stmt->execute()) {
         echo json_encode([
             "status" => "success",
             "message" => "Reserva realizada con éxito",
-            "codigo" => $codigo // Devolvemos el código generado
+            "codigo" => $codigo
         ]);
     } else {
         echo json_encode(["status" => "error", "message" => "Error al guardar la reserva: " . $stmt->error]);

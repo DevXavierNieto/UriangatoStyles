@@ -153,7 +153,6 @@
             }
 
             const formData = new FormData();
-            formData.append("accion", "validar");
             formData.append("nombre", nombre);
             formData.append("email", email);
             formData.append("telefono", telefono);
@@ -161,36 +160,37 @@
             formData.append("fecha_hora", fecha);
             formData.append("costo", costo);
 
-            fetch("server/validaciones.php", { 
+            const reservarBtn = document.querySelector(".boton-dorado");
+            reservarBtn.disabled = true; // Evita múltiples clics
+
+            fetch("server/database.php", { 
                 method: "POST",
                 body: formData
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Error en la solicitud: " + response.statusText);
-                }
-                return response.text();
-            })
-            .then(text => {
-                try {
-                    return JSON.parse(text);
-                } catch (error) {
-                    console.error("Error parseando JSON:", text);
-                    throw new Error("Respuesta no es un JSON válido");
-                }
-            })
+            .then(response => response.json())
             .then(data => {
                 if (data.status === "success") {
-                    procesarReserva(formData);
+                    alert("Reserva realizada con éxito");
+                    // Limpiar los campos después de una reserva exitosa
+                    document.getElementById("nombre").value = "";
+                    document.getElementById("email").value = "";
+                    document.getElementById("telefono").value = "";
+                    document.getElementById("fechaHora").value = "";
+                    document.getElementById("eleccion").value = "";
+                    document.getElementById("costo").value = "";
                 } else {
                     alert("Error: " + data.message);
                 }
             })
             .catch(error => {
-                console.error("Error en la solicitud de validación:", error);
-                alert("Hubo un error al validar la información.");
+                console.error("Error en la solicitud:", error);
+                alert("Hubo un error al procesar la reserva. Intenta de nuevo.");
+            })
+            .finally(() => {
+                reservarBtn.disabled = false; // Rehabilitar el botón después de la solicitud
             });
         }
+
 
     
         function procesarReserva(formData) {
