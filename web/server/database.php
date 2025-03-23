@@ -71,13 +71,9 @@ class DAOReservacion {
             return ["status" => "error", "message" => "No se encontró ninguna cita con ese código."];
         }
     }
+
     public function obtenerCitasPorFecha($fecha) {
-        $stmt = $this->conn->prepare(
-            "SELECT r.nombre, r.email, r.codigo, DATE_FORMAT(r.fecha_hora, '%H:%i') as hora, s.nombre AS servicio, r.costo
-             FROM reservaciones r 
-             JOIN servicios s ON r.servicio_id = s.id
-             WHERE DATE(r.fecha_hora) = ?"
-        );
+        $stmt = $this->conn->prepare("SELECT r.nombre, r.email, r.codigo, DATE_FORMAT(r.fecha_hora, '%H:%i') as hora, s.nombre AS servicio, r.costo FROM reservaciones r JOIN servicios s ON r.servicio_id = s.id WHERE DATE(r.fecha_hora) = ?");
         $stmt->bind_param("s", $fecha);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -88,68 +84,47 @@ class DAOReservacion {
         }
         return $citas;
     }
-    
-    
-}
 
-// Manejo de solicitudes HTTP
-$dao = new DAOReservacion();
-
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    if (isset($_GET['fecha'])) {
-        echo json_encode([
-            "status" => "success",
-            "horasOcupadas" => $dao->obtenerHorasOcupadas($_GET['fecha'])
-        ]);
-    } elseif (isset($_GET['servicios'])) {
-        echo json_encode([
-            "status" => "success",
-            "servicios" => $dao->obtenerServicios()
-        ]);
-    } elseif (isset($_GET['codigo'])) {
-        echo json_encode($dao->obtenerCitaPorCodigo($_GET['codigo']));
-    } elseif (isset($_GET['citasFecha'])) {
-    echo json_encode([
-        "status" => "success",
-        "citas" => $dao->obtenerCitasPorFecha($_GET['citasFecha'])
-    ]);
-    } elseif (isset($_GET['promocion'])) {
-        $codigo = $_GET['promocion'];
-        $stmt = $dao->conn->prepare("SELECT p.codigo, p.descuento, s.nombre AS servicio, s.costo FROM promociones p JOIN servicios s ON p.servicio_id = s.id WHERE p.codigo = ?");
+    public function obtenerPromocionPorCodigo($codigo) {
+        $stmt = $this->conn->prepare("SELECT p.codigo, p.descuento, s.nombre AS servicio, s.costo FROM promociones p JOIN servicios s ON p.servicio_id = s.id WHERE p.codigo = ?");
         $stmt->bind_param("s", $codigo);
         $stmt->execute();
-        $result = $stmt->get_result();
-    
-        if ($row = $result->fetch_assoc()) {
-            echo json_encode([
-                "status" => "success",
-                "promocion" => $row
-            ]);
-        } else {
-            echo json_encode(["status" => "error", "message" => "Código no válido"]);
-        }
-    } elseif (isset($_GET['listarPromociones'])) {
-        $stmt = $dao->conn->prepare("SELECT p.codigo, p.descripcion, p.descuento, s.nombre AS servicio FROM promociones p JOIN servicios s ON p.servicio_id = s.id");
+        return $stmt->get_result()->fetch_assoc();
+    }
+
+    public function listarPromociones() {
+        $stmt = $this->conn->prepare("SELECT p.codigo, p.descripcion, p.descuento, s.nombre AS servicio FROM promociones p JOIN servicios s ON p.servicio_id = s.id");
         $stmt->execute();
         $result = $stmt->get_result();
-    
         $promos = [];
         while ($row = $result->fetch_assoc()) {
             $promos[] = $row;
         }
-    
-        echo json_encode([
-            "status" => "success",
-            "promociones" => $promos
-        ]);
+        return $promos;
     }
-    
-    else {
+}
+
+$dao = new DAOReservacion();
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if (isset($_GET['fecha'])) {
+        echo json_encode(["status" => "success", "horasOcupadas" => $dao->obtenerHorasOcupadas($_GET['fecha'])]);
+    } elseif (isset($_GET['servicios'])) {
+        echo json_encode(["status" => "success", "servicios" => $dao->obtenerServicios()]);
+    } elseif (isset($_GET['codigo'])) {
+        echo json_encode($dao->obtenerCitaPorCodigo($_GET['codigo']));
+    } elseif (isset($_GET['citasFecha'])) {
+        echo json_encode(["status" => "success", "citas" => $dao->obtenerCitasPorFecha($_GET['citasFecha'])]);
+    } elseif (isset($_GET['promocion'])) {
+        $promo = $dao->obtenerPromocionPorCodigo($_GET['promocion']);
+        echo json_encode($promo ? ["status" => "success", "promocion" => $promo] : ["status" => "error", "message" => "Código no válido"]);
+    } elseif (isset($_GET['listarPromociones'])) {
+        echo json_encode(["status" => "success", "promociones" => $dao->listarPromociones()]);
+    } else {
         echo json_encode(["status" => "error", "message" => "Parámetro no reconocido"]);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
-
     if (!isset($data['nombre'], $data['email'], $data['telefono'], $data['servicio'], $data['fecha_hora'])) {
         echo json_encode(["status" => "error", "message" => "Faltan campos obligatorios"]);
         exit;
@@ -162,8 +137,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 
     $costoFinal = $servicio['costo'];
-
-    // Si se envió un código de promoción, aplicarlo
     if (!empty($data['promocion'])) {
         $stmt = $dao->conn->prepare("SELECT descuento FROM promociones WHERE codigo = ? AND servicio_id = ?");
         $stmt->bind_param("si", $data['promocion'], $servicio['id']);
@@ -199,9 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     } else {
         echo json_encode(["status" => "error", "message" => "Error al guardar la reserva"]);
     }
-}
-
-elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+} elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     $data = json_decode(file_get_contents('php://input'), true);
     if (!isset($data['codigo'])) {
         echo json_encode(["status" => "error", "message" => "Código no proporcionado"]);
@@ -216,8 +187,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     } else {
         echo json_encode(["status" => "error", "message" => "No se pudo eliminar la cita"]);
     }
-}
-
-else {
+} else {
     echo json_encode(["status" => "error", "message" => "Método no permitido"]);
 }
+?>
