@@ -8,6 +8,7 @@
 
     <!-- Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="css/administracion.css">
 </head>
 <body>
     <nav class="nav-adm">
@@ -55,6 +56,76 @@
             <button class="recordar-cita-btn" id="recordar-cita">Recordar cita</button>
         </article>
     </section>  
+
+    <section class="promo-admin">
+        <h2>Gestión de Promociones</h2>
+
+        <div class="promo-form">
+            <div class="form-group">
+                <label for="codigo">Código:</label>
+                <input type="text" id="codigo" placeholder="Ej: CORTE10">
+            </div>
+        
+            <div class="form-group">
+                <label for="descripcion">Descripción:</label>
+                <input type="text" id="descripcion" placeholder="Ej: 10% en cortes">
+            </div>
+        
+            <div class="form-group">
+                <label for="descuento">Descuento (%):</label>
+                <input type="number" id="descuento" placeholder="Ej: 10">
+            </div>
+        
+            <div class="form-group">
+                <label for="servicio">Servicio:</label>
+                <select id="servicio">
+                    <option value="">Selecciona un servicio</option>
+                    <option value="1">Corte</option>
+                    <option value="2">Manicura</option>
+                    <!-- etc -->
+                </select>
+            </div>
+        
+            <div class="promo-actions">
+                <button type="button">Guardar</button>
+                <button type="button">Cancelar</button>
+            </div>
+        </div>
+
+        <table class="promo-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Descripción</th>
+                    <th>Descuento</th>
+                    <th>Servicio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>CORTEDESC10</td>
+                    <td>10% de descuento en cortes</td>
+                    <td>10%</td>
+                    <td>Corte</td>
+                    <td>
+                        <button>Editar</button>
+                        <button>Eliminar</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>MANI15OFF</td>
+                    <td>15% de descuento en manicura</td>
+                    <td>15%</td>
+                    <td>Manicura</td>
+                    <td>
+                        <button>Editar</button>
+                        <button>Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
 
     <footer>
         <div class="footer-icons">

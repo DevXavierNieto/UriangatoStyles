@@ -16,7 +16,7 @@ if (!isset($data['codigo'])) {
 $codigo = $data['codigo'];
 
 $conn = conectarDB();
-$stmt = $conn->prepare("SELECT r.nombre, r.email, r.fecha_hora, s.nombre AS servicio, s.costo 
+$stmt = $conn->prepare("SELECT r.nombre, r.email, r.fecha_hora, s.nombre AS servicio, r.costo 
                         FROM reservaciones r 
                         JOIN servicios s ON r.servicio_id = s.id 
                         WHERE r.codigo = ?");
