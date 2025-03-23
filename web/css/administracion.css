@@ -160,11 +160,7 @@ footer {
 
 /* Scroll para el contenedor de citas */
 #user-container {
-    max-height: 300px; /* Puedes ajustar la altura según necesidad */
+    max-height: 300px;
     overflow-y: auto;
-    padding-right: 8px; /* espacio para que no se corte el contenido con el scrollbar */
-    margin-top: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 10px;
     background-color: #fff;
 }
