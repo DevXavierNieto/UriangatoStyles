@@ -20,8 +20,8 @@ class DAOReservacion {
     }
 
     public function insertarReserva($data) {
-        $stmt = $this->conn->prepare("INSERT INTO reservaciones (nombre, email, telefono, servicio_id, fecha_hora, codigo) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssss", $data['nombre'], $data['email'], $data['telefono'], $data['servicio_id'], $data['fecha_hora'], $data['codigo']);
+        $stmt = $this->conn->prepare("INSERT INTO reservaciones (nombre, email, telefono, servicio_id, fecha_hora, codigo, costo) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssd", $data['nombre'], $data['email'], $data['telefono'], $data['servicio_id'], $data['fecha_hora'], $data['codigo'], $data['costo']);
         return $stmt->execute();
     }
 
@@ -51,7 +51,7 @@ class DAOReservacion {
     }
 
     public function obtenerCitaPorCodigo($codigo) {
-        $stmt = $this->conn->prepare("SELECT r.fecha_hora, r.nombre, s.nombre AS servicio, s.costo FROM reservaciones r JOIN servicios s ON r.servicio_id = s.id WHERE r.codigo = ?");
+        $stmt = $this->conn->prepare("SELECT r.fecha_hora, r.nombre, s.nombre AS servicio, r.costo FROM reservaciones r JOIN servicios s ON r.servicio_id = s.id WHERE r.codigo = ?");
         $stmt->bind_param("s", $codigo);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -73,7 +73,7 @@ class DAOReservacion {
     }
     public function obtenerCitasPorFecha($fecha) {
         $stmt = $this->conn->prepare(
-            "SELECT r.nombre, r.email, r.codigo, DATE_FORMAT(r.fecha_hora, '%H:%i') as hora, s.nombre AS servicio, s.costo
+            "SELECT r.nombre, r.email, r.codigo, DATE_FORMAT(r.fecha_hora, '%H:%i') as hora, s.nombre AS servicio, r.costo
              FROM reservaciones r 
              JOIN servicios s ON r.servicio_id = s.id
              WHERE DATE(r.fecha_hora) = ?"
@@ -81,7 +81,7 @@ class DAOReservacion {
         $stmt->bind_param("s", $fecha);
         $stmt->execute();
         $result = $stmt->get_result();
-    
+
         $citas = [];
         while ($row = $result->fetch_assoc()) {
             $citas[] = $row;
@@ -113,7 +113,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         "status" => "success",
         "citas" => $dao->obtenerCitasPorFecha($_GET['citasFecha'])
     ]);
-    } 
+    } elseif (isset($_GET['promocion'])) {
+        $codigo = $_GET['promocion'];
+        $stmt = $dao->conn->prepare("SELECT p.codigo, p.descuento, s.nombre AS servicio, s.costo FROM promociones p JOIN servicios s ON p.servicio_id = s.id WHERE p.codigo = ?");
+        $stmt->bind_param("s", $codigo);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        if ($row = $result->fetch_assoc()) {
+            echo json_encode([
+                "status" => "success",
+                "promocion" => $row
+            ]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Código no válido"]);
+        }
+    } elseif (isset($_GET['listarPromociones'])) {
+        $stmt = $dao->conn->prepare("SELECT p.codigo, p.descripcion, p.descuento, s.nombre AS servicio FROM promociones p JOIN servicios s ON p.servicio_id = s.id");
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        $promos = [];
+        while ($row = $result->fetch_assoc()) {
+            $promos[] = $row;
+        }
+    
+        echo json_encode([
+            "status" => "success",
+            "promociones" => $promos
+        ]);
+    }
+    
     else {
         echo json_encode(["status" => "error", "message" => "Parámetro no reconocido"]);
     }
@@ -131,6 +161,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         exit;
     }
 
+    $costoFinal = $servicio['costo'];
+
+    // Si se envió un código de promoción, aplicarlo
+    if (!empty($data['promocion'])) {
+        $stmt = $dao->conn->prepare("SELECT descuento FROM promociones WHERE codigo = ? AND servicio_id = ?");
+        $stmt->bind_param("si", $data['promocion'], $servicio['id']);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        if ($promo = $res->fetch_assoc()) {
+            $costoFinal -= $costoFinal * ($promo['descuento'] / 100);
+        }
+    }
+
     function generarCodigo($longitud = 5) {
         $caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         return substr(str_shuffle($caracteres), 0, $longitud);
@@ -142,7 +185,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         'telefono' => $data['telefono'],
         'servicio_id' => $servicio['id'],
         'fecha_hora' => $data['fecha_hora'],
-        'codigo' => generarCodigo()
+        'codigo' => generarCodigo(),
+        'costo' => $costoFinal
     ];
 
     if ($dao->insertarReserva($reserva)) {
@@ -150,12 +194,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             "status" => "success",
             "message" => "Reserva creada correctamente",
             "codigo" => $reserva['codigo'],
-            "costo" => "$" . number_format($servicio['costo'], 2)
+            "costo" => "$" . number_format($costoFinal, 2)
         ]);
     } else {
         echo json_encode(["status" => "error", "message" => "Error al guardar la reserva"]);
     }
-} 
+}
+
 elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     $data = json_decode(file_get_contents('php://input'), true);
     if (!isset($data['codigo'])) {

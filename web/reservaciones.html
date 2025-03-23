@@ -28,12 +28,13 @@
                     <label>Selecciona tu Servicio</label>
                     <select id="eleccion" onchange="actualizarCosto()">
                         <option value="">Elige un servicio</option>
-                        <option value="Manicura">Manicura</option>
-                        <option value="Cabello">Cabello</option>
-                        <option value="Corte">Corte</option>
-                        <option value="Reflejos">Reflejos</option>
-                        <option value="Pestañas permanentes">Pestañas permanentes</option>
                     </select>
+                    
+                    <label>¿Tienes un cupón?</label>
+                    <input type="text" id="codigo-promocion" placeholder="Ingresa tu código" onblur="validarCodigo()">
+                    <button type="button" onclick="validarCodigo()">Aplicar Cupón</button>
+
+
                     
                     <label>Fecha</label>
                     <input type="date" id="fecha">

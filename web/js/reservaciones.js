@@ -1,20 +1,53 @@
+let serviciosGlobal = [];
+let descuentoAplicado = null;
+
 function actualizarCosto() {
     const servicio = document.getElementById("eleccion").value;
     const costo = document.getElementById("costo");
     const selected = serviciosGlobal.find(s => s.nombre === servicio);
-    costo.value = selected ? selected.costo : "";
+    
+    if (!selected) {
+        costo.value = "";
+        return;
+    }
+
+    if (descuentoAplicado && descuentoAplicado.servicio === servicio) {
+        const nuevoPrecio = selected.costo - (selected.costo * (descuentoAplicado.descuento / 100));
+        costo.value = nuevoPrecio.toFixed(2);
+    } else {
+        costo.value = selected.costo;
+    }
 }
 
-function esNombreValido(nombre) {
-    return /^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$/.test(nombre);
+function getParametroURL(nombre) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(nombre);
 }
 
-function esEmailValido(email) {
-    return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
-}
+function validarCodigo() {
+    const codigo = document.getElementById("codigo-promocion").value.trim();
 
-function esTelefonoValido(telefono) {
-    return /^\d{10}$/.test(telefono);
+    if (!codigo) return;
+
+    fetch(`server/database.php?promocion=${codigo}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                descuentoAplicado = data.promocion;
+
+                const select = document.getElementById("eleccion");
+                select.value = descuentoAplicado.servicio;
+
+                actualizarCosto();
+            } else {
+                alert("Código no válido.");
+                descuentoAplicado = null;
+            }
+        })
+        .catch(err => {
+            console.error("Error al validar código:", err);
+            alert("Error al validar el código de promoción.");
+        });
 }
 
 function reservar() {
@@ -27,21 +60,6 @@ function reservar() {
 
     if (!nombre || !email || !telefono || !fecha || !hora || !servicio) {
         alert("Todos los campos son obligatorios.");
-        return;
-    }
-
-    if (!esNombreValido(nombre)) {
-        alert("El nombre solo debe contener letras y espacios.");
-        return;
-    }
-
-    if (!esEmailValido(email)) {
-        alert("Correo electrónico inválido.");
-        return;
-    }
-
-    if (!esTelefonoValido(telefono)) {
-        alert("El número de teléfono debe contener exactamente 10 dígitos.");
         return;
     }
 
@@ -58,7 +76,8 @@ function reservar() {
             email,
             telefono,
             servicio,
-            fecha_hora: fechaHora
+            fecha_hora: fechaHora,
+            promocion: descuentoAplicado?.codigo || null
         })
     })
     .then(res => res.json())
@@ -71,7 +90,9 @@ function reservar() {
             document.getElementById("fecha").value = "";
             document.getElementById("hora").innerHTML = '<option value="">Selecciona una hora</option>';
             document.getElementById("eleccion").value = "";
+            document.getElementById("codigo-promocion").value = "";
             document.getElementById("costo").value = "";
+            descuentoAplicado = null;
         } else {
             alert("Error: " + data.message);
         }
@@ -85,13 +106,10 @@ function reservar() {
     });
 }
 
-let serviciosGlobal = [];
-
 document.addEventListener("DOMContentLoaded", () => {
     const fechaInput = document.getElementById("fecha");
     const horaSelect = document.getElementById("hora");
 
-    // Obtener fecha actual en zona horaria de CDMX
     const formatter = new Intl.DateTimeFormat('sv-SE', {
         timeZone: 'America/Mexico_City',
         year: 'numeric',
@@ -106,8 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const hoyCDMX = new Date(`${dateParts.year}-${dateParts.month}-${dateParts.day}T00:00:00`);
-    hoyCDMX.setDate(hoyCDMX.getDate() + 1); // Mañana
-
+    hoyCDMX.setDate(hoyCDMX.getDate() + 1);
     fechaInput.min = hoyCDMX.toISOString().split("T")[0];
 
     fechaInput.addEventListener("change", () => {
@@ -132,24 +149,31 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     });
 
-    // Cargar servicios al iniciar
+    // Cargar servicios dinámicamente
     fetch("server/database.php?servicios=1")
-        .then(res => res.json())
-        .then(data => {
-            if (data.status === "success") {
-                serviciosGlobal = data.servicios;
-                const select = document.getElementById("eleccion");
-                select.innerHTML = '<option value="">Elige un servicio</option>';
-                data.servicios.forEach(s => {
-                    const opt = document.createElement("option");
-                    opt.value = s.nombre;
-                    opt.textContent = s.nombre;
-                    select.appendChild(opt);
-                });
-            }
-        });
-});
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === "success") {
+            serviciosGlobal = data.servicios;
+            const select = document.getElementById("eleccion");
+            select.innerHTML = '<option value="">Elige un servicio</option>';
+            data.servicios.forEach(s => {
+                const opt = document.createElement("option");
+                opt.value = s.nombre;
+                opt.textContent = s.nombre;
+                select.appendChild(opt);
+            });
 
+            // Si viene un código de promoción en la URL, aplicarlo automáticamente
+            const codigoPromo = getParametroURL("codigo");
+            if (codigoPromo) {
+                document.getElementById("codigo-promocion").value = codigoPromo;
+                validarCodigo();
+            }
+        }
+    });
+
+});
 
 function generarHorariosDisponibles(ocupadas) {
     const horarios = [];
@@ -163,4 +187,3 @@ function generarHorariosDisponibles(ocupadas) {
     }
     return horarios;
 }
-
