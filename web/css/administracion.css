@@ -164,3 +164,62 @@ footer {
     overflow-y: auto;
     background-color: #fff;
 }
+
+/* Tablets (pantallas medianas) */
+@media (max-width: 992px) {
+    .promo-form {
+      grid-template-columns: 1fr; /* Formulario en una sola columna */
+    }
+  
+    .promo-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .promo-actions button {
+      width: 100%;
+      max-width: 250px;
+    }
+  
+    .promo-table th,
+    .promo-table td {
+      font-size: 0.9rem;
+      padding: 0.6rem;
+    }
+  }
+  
+  /* Móviles (pantallas pequeñas) */
+  @media (max-width: 600px) {
+    .container-adm {
+      padding: 1rem;
+      margin: 1rem;
+    }
+  
+    .promo-admin h2 {
+      font-size: 1.4rem;
+    }
+  
+    .promo-form input,
+    .promo-form select {
+      font-size: 0.95rem;
+      padding: 0.5rem;
+    }
+  
+    .promo-actions {
+      gap: 10px;
+    }
+  
+    .promo-table {
+      font-size: 0.85rem;
+    }
+  
+    .promo-table td button {
+      font-size: 0.8rem;
+      padding: 0.4rem 0.8rem;
+    }
+  
+    #user-container {
+      max-height: 250px;
+    }
+  }
+  

@@ -744,3 +744,177 @@ html {
     text-decoration: none;
     font-weight: bold;   
 }
+
+
+/* Media Query para pantallas medianas (tablets) */
+@media (max-width: 992px) {
+    .main-container-adm {
+      flex-direction: column;
+      gap: 15px;
+    }
+  
+    .appointment-details-adm {
+      flex-direction: column;
+      text-align: left;
+      padding: 20px;
+    }
+  
+    .left-adm, .right-adm {
+      min-width: 100%;
+    }
+  
+    .form-header {
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .promo-box {
+      font-size: 20px;
+      padding: 30px;
+    }
+  
+    .promo-box-unique {
+      font-size: 24px;
+      padding: 40px;
+    }
+  
+    .testimonials-container-unique {
+      flex-direction: column;
+      gap: 20px;
+    }
+  
+    .testimonial-unique {
+      width: 100%;
+    }
+    .appointment-details {
+        flex-direction: column;
+        width: 80%;
+        padding: 20px;
+        text-align: left;
+      }
+    
+      .appointment-details .left,
+      .appointment-details .right {
+        width: 100%;
+        padding: 10px 0;
+      }
+    
+      .search-box {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+    
+      .search-box input {
+        width: 100%;
+        max-width: 400px;
+      }
+    
+      .search-button {
+        font-size: 18px;
+      }
+  }
+  
+  /* Media Query para pantallas pequeñas (moviles) */
+  @media (max-width: 600px) {
+    nav ul {
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .appointment-details-adm {
+      width: 95%;
+    }
+  
+    .form-container, .form-container-adm {
+      width: 95%;
+    }
+  
+    .promo-form {
+      grid-template-columns: 1fr;
+    }
+  
+    .promo-actions {
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .promo-box {
+      width: 100%;
+      height: auto;
+      border-right: none;
+      border-bottom: 2px solid black;
+    }
+  
+    .promo-row {
+      flex-direction: column;
+    }
+  
+    .promo-box-unique {
+      padding: 20px;
+      font-size: 20px;
+    }
+  
+    .services-box-unique {
+      width: 90%;
+    }
+  
+    .header-unique {
+      flex-direction: column;
+      height: auto;
+      padding: 20px;
+    }
+  
+    .header-text-unique {
+      width: 100%;
+      text-align: center;
+    }
+  
+    .header-image-unique img {
+      margin-top: 20px;
+      width: 150px;
+    }
+  
+    .testimonials-section-unique h3 {
+      font-size: 28px;
+    }
+  
+    .testimonial-unique {
+      font-size: 14px;
+    }
+  
+    .quote-unique {
+      font-size: 30px;
+    }
+    .appointment-details {
+        flex-direction: column;
+        width: 90%;
+        padding: 15px;
+        text-align: left;
+      }
+    
+      .appointment-details .left,
+      .appointment-details .right {
+        width: 100%;
+        padding: 5px 0;
+      }
+    
+      .search-box {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+      }
+    
+      .search-box input {
+        width: 100%;
+        max-width: 300px;
+      }
+    
+      .search-button {
+        font-size: 18px;
+      }
+  }
