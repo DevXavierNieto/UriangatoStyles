@@ -84,6 +84,29 @@ function reservar() {
     .then(data => {
         if (data.status === "success") {
             alert(`Reserva realizada con éxito. Tu código es: ${data.codigo}. Costo: ${data.costo}`);
+    
+            // Enviar correo de confirmación
+            fetch("server/sendEmail.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email,
+                    nombre,
+                    fecha: fechaHora,
+                    servicio,
+                    costo: data.costo,
+                    codigo: data.codigo
+                })
+            })
+            .then(res => res.json())
+            .then(emailData => {
+                console.log("Correo:", emailData.message);
+            })
+            .catch(err => {
+                console.error("Error al enviar correo de confirmación:", err);
+            });
+    
+            // Limpiar formulario
             document.getElementById("nombre").value = "";
             document.getElementById("email").value = "";
             document.getElementById("telefono").value = "";
@@ -97,6 +120,7 @@ function reservar() {
             alert("Error: " + data.message);
         }
     })
+    
     .catch(err => {
         console.error("Error en la solicitud:", err);
         alert("Ocurrió un error al procesar la reserva.");

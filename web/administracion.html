@@ -80,9 +80,7 @@
                 <label for="servicio">Servicio:</label>
                 <select id="servicio">
                     <option value="">Selecciona un servicio</option>
-                    <option value="1">Corte</option>
-                    <option value="2">Manicura</option>
-                    <!-- etc -->
+                    <!-- Se llenará dinámicamente -->
                 </select>
             </div>
         
@@ -103,26 +101,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>CORTEDESC10</td>
-                    <td>10% de descuento en cortes</td>
-                    <td>10%</td>
-                    <td>Corte</td>
-                    <td>
-                        <button>Editar</button>
-                        <button>Eliminar</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>MANI15OFF</td>
-                    <td>15% de descuento en manicura</td>
-                    <td>15%</td>
-                    <td>Manicura</td>
-                    <td>
-                        <button>Editar</button>
-                        <button>Eliminar</button>
-                    </td>
-                </tr>
+                <!-- Se llenará dinámicamente -->
             </tbody>
         </table>
     </section>
@@ -139,6 +118,50 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="js/administracion.js"></script>
 
-    
+
+
+
+
+
+    <!-- Modal personalizado para editar promoción -->
+<div id="modal-editar" class="custom-modal" style="display: none;">
+    <div class="custom-modal-content">
+      <span class="custom-close">&times;</span>
+      <h3>Editar Promoción</h3>
+  
+      <!-- Campo oculto para ID de la promoción -->
+      <input type="hidden" id="edit-id">
+  
+      <div class="form-group">
+        <label for="edit-codigo">Código:</label>
+        <input type="text" id="edit-codigo">
+      </div>
+  
+      <div class="form-group">
+        <label for="edit-descripcion">Descripción:</label>
+        <input type="text" id="edit-descripcion">
+      </div>
+  
+      <div class="form-group">
+        <label for="edit-descuento">Descuento (%):</label>
+        <input type="number" id="edit-descuento">
+      </div>
+  
+      <div class="form-group">
+        <label for="edit-servicio">Servicio:</label>
+        <select id="edit-servicio">
+          <!-- Opciones se cargan dinámicamente -->
+        </select>
+      </div>
+  
+      <div class="promo-actions">
+        <button id="guardar-edicion">Guardar Cambios</button>
+        <button id="cancelar-edicion">Cancelar</button>
+      </div>
+    </div>
+  </div>
+  
+  
+  
 </body>
 </html>

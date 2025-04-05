@@ -223,3 +223,121 @@ footer {
     }
   }
   
+
+
+/* Modal personalizado refinado */
+.custom-modal {
+  position: fixed;
+  z-index: 1000;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.custom-modal-content {
+  background: #fff0f5;
+  border-radius: 15px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: slideDown 0.3s ease-out;
+}
+
+.custom-modal-content h3 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 1.2rem;
+}
+
+.custom-modal-content .form-group {
+  margin-bottom: 1rem;
+}
+
+.custom-modal-content label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.custom-modal-content input,
+.custom-modal-content select {
+  width: 100%;
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff6fa;
+}
+
+.custom-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.custom-close:hover {
+  color: #e91e63;
+}
+
+/* Botones */
+.custom-modal-content .promo-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.custom-modal-content .promo-actions button {
+  padding: 0.6rem 1.4rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+#guardar-edicion {
+  background-color: #ffc107;
+  color: #000;
+}
+
+#guardar-edicion:hover {
+  background-color: #e0ac00;
+}
+
+#cancelar-edicion {
+  background-color: #f44336;
+  color: white;
+}
+
+#cancelar-edicion:hover {
+  background-color: #d32f2f;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from {
+      transform: translateY(-30px);
+      opacity: 0;
+  }
+  to {
+      transform: translateY(0);
+      opacity: 1;
+  }
+}
